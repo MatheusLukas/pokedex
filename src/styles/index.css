@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Oxanium&display=swap");
+
+/* font-family: 'Oxanium', cursive; */
+
+body {
+  @apply bg-blue-400;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
