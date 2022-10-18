@@ -4,7 +4,7 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Oxanium&display=swap");
 
-/* font-family: 'Oxanium', cursive; */
+/*  */
 
 body {
   @apply bg-blue-400;
@@ -12,4 +12,5 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "Oxanium", cursive;
 }
