@@ -1,46 +1,107 @@
-import { useState } from "react";
+import { Children, useState, useRef, FormEvent } from "react";
 import { GetPokemonData } from "../utils/fetch";
-import { GetPokemonImage } from "../utils/fetch";
+import SvgAttack from "./icons/SvgAttack";
+import SvghP from "./icons/SvgHp";
+import SvgSpecialAtack from "./icons/SvgSpecialAtack";
+import SvgSpeed from "./icons/SvgSpeed";
+import type { Pokemon } from "../@types/Pokemon";
+
+type stat = {
+  base_stat: number;
+  effort?: number;
+  stat: { name: string; url: string };
+};
 
 export function Pokedex() {
-  const [pokemon, setPokemon] = useState("");
-  async function searchPokemon() {
-    const mostrarPokemon = await GetPokemonImage(pokemon);
-    // const pokemonImage = await GetPokemonImage(pokemon);
-    console.log(mostrarPokemon);
+  const [pokemon, setPokemon] = useState<Pokemon | null>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  console.log(pokemon);
+
+  async function searchPokemon(e: FormEvent) {
+    e.preventDefault();
+    const pokemonName = searchInputRef.current?.value;
+    if (!pokemonName?.trim()) {
+      return;
+    }
+    const data = await GetPokemonData(pokemonName);
+    if (!data) {
+      alert("Pokémon not found!");
+    }
+    setPokemon(data);
   }
 
   return (
     <div className="flex">
       <div className="bg-[#f63c5b] w-[400px] h-[600px] border-[6px] rounded-[20px] border-zinc-900 flex justify-start flex-col items-center">
         <div className="flex flex-col gap-4 py-[20px]">
-          <div className=" w-[300px] h-[170px] border-[20px] flex items-center rounded-[20px] border-zinc-900">
+          <div className=" w-[300px] h-[170px] border-[20px] flex items-center rounded-[20px] border-zinc-900 relative  ">
             {/* Foto do pokemon */}
+
+            <img className="rounded-[2px] object-contain" src="/scene.jpg" />
+
             <img
-              className="rounded-[2px] object-contain"
-              src="/scene.jpg"
-            ></img>
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-20"
+              src={
+                pokemon?.sprites?.versions["generation-v"]["black-white"]
+                  .animated?.front_default
+              }
+            />
           </div>
-          <div className="relative  h-fit">
+          <form onSubmit={searchPokemon} className="relative h-fit">
             {/* Nome do Pokemon */}
             <input
-              type={"text"}
-              value={pokemon}
-              onChange={(e) => setPokemon(e.target.value)}
-              className=" w-[300px] h-[36px] rounded-[5px]  border-[2px] border-black  "
+              type="text"
+              ref={searchInputRef}
+              className="w-[300px] h-[36px] rounded-[5px]  border-[2px] border-black"
               placeholder="Name or Number"
             />
-            <button onClick={searchPokemon}>
+            <button type="submit">
               <img
                 className="absolute right-0 top-0 w-8 h-full border-l-2 border-black rounded-sm"
                 src="/lupa.svg"
               />
             </button>
-          </div>
+          </form>
         </div>
 
         {/* Status do pokemon */}
-        <div className="bg-white w-[300px] h-[220px] mt-[25px] rounded-[10px] border-[2px] border-black "></div>
+        <div className="bg-white w-[300px] h-[220px] mt-[25px] rounded-[10px] border-[2px] border-black">
+          <div className="flex justify-center">
+            <h1 className="first-letter:capitalize border-black border-b-2 h-fit w-[80%] text-center mb-5">
+              {pokemon?.name}
+            </h1>
+          </div>
+
+          <div className="w-full flex flex-wrap gap-y-10 text-[15px] text-start">
+            {pokemon?.stats?.map((stat: stat) => {
+              const statsName = stat.stat.name;
+              if (statsName != "special-defense" && statsName != "defense") {
+                {
+                  {
+                    return (
+                      <div className="flex flex-row h-10 w-1/2 items-center justify-around border-black border-2">
+                        {statsName == "attack" ? (
+                          <SvgAttack />
+                        ) : statsName == "special-attack" ? (
+                          <SvgSpecialAtack />
+                        ) : statsName == "hp" ? (
+                          <SvghP />
+                        ) : (
+                          <SvgSpeed />
+                        )}
+                        <div className="flex flex-row w-1/2 ">
+                          <p className="first-letter:capitalize">{statsName}</p>
+                          <p>{stat.base_stat}</p>
+                        </div>
+                      </div>
+                    );
+                  }
+                }
+              }
+            })}
+          </div>
+        </div>
         {/* Botoes */}
         <div className="flex gap-3 mt-[20px] ">
           <button className=" w-[100px] h-[40px] border-[5px] rounded-[10px] border-black bg-zinc-900 text-white hover:bg-white hover:text-black hover:shadow-black hover:shadow-lg hover:scale-110">
