@@ -5,6 +5,8 @@ import SvghP from "./icons/SvgHp";
 import SvgSpecialAtack from "./icons/SvgSpecialAtack";
 import SvgSpeed from "./icons/SvgSpeed";
 import type { Pokemon } from "../@types/Pokemon";
+import SvgPlus from "./icons/SvgPlus";
+import SvgInfo from "./icons/SvgInfo";
 
 type stat = {
   base_stat: number;
@@ -25,6 +27,7 @@ export function Pokedex() {
       return;
     }
     const data = await GetPokemonData(pokemonName);
+
     if (!data) {
       alert("Pokémon not found!");
     }
@@ -66,21 +69,19 @@ export function Pokedex() {
         </div>
 
         {/* Status do pokemon */}
-        <div className="bg-white w-[300px] h-[220px] mt-[25px] rounded-[10px] border-[2px] border-black">
-          <div className="flex justify-center">
+        <div className="bg-white w-[300px] h-[220px] rounded-[10px] border-[2px] border-black py-2 px-1">
+          <div className="w-full flex flex-wrap justify-center gap-y-3 text-[15px] text-start">
             <h1 className="first-letter:capitalize border-black border-b-2 h-fit w-[80%] text-center mb-5">
               {pokemon?.name}
             </h1>
-          </div>
 
-          <div className="w-full flex flex-wrap gap-y-10 text-[15px] text-start">
             {pokemon?.stats?.map((stat: stat) => {
               const statsName = stat.stat.name;
               if (statsName != "special-defense" && statsName != "defense") {
                 {
                   {
                     return (
-                      <div className="flex flex-row h-10 w-1/2 items-center justify-around border-black border-2">
+                      <div className="flex flex-row h-10 w-1/2 items-center  border-black border-2">
                         {statsName == "attack" ? (
                           <SvgAttack />
                         ) : statsName == "special-attack" ? (
@@ -90,7 +91,7 @@ export function Pokedex() {
                         ) : (
                           <SvgSpeed />
                         )}
-                        <div className="flex flex-row w-1/2 ">
+                        <div className="flex flex-row w-1/2">
                           <p className="first-letter:capitalize">{statsName}</p>
                           <p>{stat.base_stat}</p>
                         </div>
@@ -100,6 +101,24 @@ export function Pokedex() {
                 }
               }
             })}
+            <div className="w-full flex flex-row">
+              <div className="w-1/2 px-4 flex justify-center ">
+                <button
+                  id="Add"
+                  className=" w-6 h-6 border-2 bg-green-300 border-black hover:w-full rounded transition-all duration-300 flex flex-row"
+                >
+                  <SvgPlus />
+                </button>
+              </div>
+              <div className="w-1/2 px-4 flex justify-center ">
+                <button
+                  id="Info"
+                  className=" w-6 h-6 bg-blue-300 border-black border-2 hover:w-full rounded transition-all duration-300 flex flex-row"
+                >
+                  <SvgInfo />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         {/* Botoes */}

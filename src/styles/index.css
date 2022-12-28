@@ -14,3 +14,25 @@ body {
   align-items: center;
   font-family: "Oxanium", cursive;
 }
+
+button#Info:hover::after {
+  content: "More Info";
+  opacity: 1;
+}
+
+button#Info::after {
+  content: "";
+  opacity: 0;
+  transition: opacity 200ms 200ms ease;
+}
+
+button#Add:hover::after {
+  content: "Add to Team";
+  opacity: 1;
+}
+
+button#Add::after {
+  content: "";
+  opacity: 0;
+  transition: opacity 200ms 200ms ease;
+}
